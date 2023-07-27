@@ -43,11 +43,11 @@ fluidPage(
               type = "start"
             ),
             br(),
-            textOutput(outputId = 'response'),
-            br(),
-            # textOutput(outputId = 'prompt'),
-            br(),
-            # tableOutput(outputId = 'hansard'),
+            markdown(
+              textOutput(outputId = 'response'), 
+              extensions = TRUE, 
+              .noWS = NULL
+            ),
             br()
           ),
           tabPanel(
@@ -59,8 +59,11 @@ fluidPage(
             #   choices = iso_lookup,
             #   selected = 'GBR'
             # ),
-            textOutput(outputId = 'debug_text'),
-            tableOutput(outputId = 'debug_table'),
+            # textOutput(outputId = 'debug_text'),
+            # tableOutput(outputId = 'debug_table'),
+            # textOutput(outputId = 'prompt'),
+            # tableOutput(outputId = 'hansard'),
+            # br()
           )
         )
       )

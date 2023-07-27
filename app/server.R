@@ -52,9 +52,26 @@ hansard_df |>
 
 shinyServer(function(input, output, session) {
   
-  # Data ####
+  # Inputs ####
   
-  # Reactive bits
+  output$search_ui <- renderUI({
+    shinyGovstyle::text_Input(
+      inputId = "search", 
+      label = "Theme"
+    )
+  })
+  
+  output$mp_selecter_ui <- renderUI({
+    selectizeInput(
+      inputId = 'mp_selecter',
+      label = 'Choose MP',
+      choices = hansard_mps,
+      selected = 'Michelle Donelan',
+      multiple = F
+    )
+  })
+  
+  # Reactive outputs ####
   
   rv <- reactiveValues(
     hansard_filtered = hansard_df,
@@ -74,7 +91,7 @@ shinyServer(function(input, output, session) {
         )
       )
     
-    cat(file=stderr(), paste0(nrow(rv$hansard_filtered)))
+    # cat(file=stderr(), paste0(nrow(rv$hansard_filtered)))
     
     output$hansard <- renderTable({
       rv$hansard_filtered
@@ -88,7 +105,7 @@ shinyServer(function(input, output, session) {
       speeches = isolate(rv$hansard_filtered$paragraph_text)
     )
     
-    cat(file=stderr(), paste0(rv$prompt))
+    # cat(file=stderr(), paste0(rv$prompt))
     
     output$prompt <- renderText({
       rv$prompt
@@ -103,73 +120,13 @@ shinyServer(function(input, output, session) {
       model = "claude-1"
     )
     
-    cat(file=stderr(), paste0(rv$response))
+    # cat(file=stderr(), paste0(rv$response))
     
     output$response <- renderText({
       rv$response
     })
     
   })
-  
-  # get_hansard_and_summarise <- eventReactive(input$search_and_summarise, {
-  #   
-  #   hansard_filtered <- hansard_df |> 
-  #     filter(speakername == input$mp_selecter) |> 
-  #     # Semantic search will go here
-  #     filter(
-  #       str_detect(
-  #         paragraph_text, 
-  #         regex(input$search, ignore_case = T), 
-  #         negate = FALSE
-  #       )
-  #     )
-  #   
-  #   
-  #   
-  #   res <- create_completion_anthropic(
-  #     prompt = prompt,
-  #     history = NULL,
-  #     model = "claude-1"
-  #   )
-  #   
-  #   res
-  #   
-  # })
-  
-  # Bills display
-  
-  # Inputs ####
-  
-  # Rendered from the server to reduce database calls and speed up
-  
-  output$search_ui <- renderUI({
-    shinyGovstyle::text_Input(
-      inputId = "search", 
-      label = "Theme"
-    )
-  })
-  
-  output$mp_selecter_ui <- renderUI({
-    selectizeInput(
-      inputId = 'mp_selecter',
-      label = 'Choose MP',
-      choices = hansard_mps,
-      selected = 'Michelle Donelan',
-      multiple = F
-    )
-  })
-
-  # output$prompt <- renderText({
-  #   rv$prompt
-  # })
-  
-  # output$hansard <- renderTable({
-  #   rv$hansard_filtered
-  # })
-  
-  # Outputs ####
-  
-  #
   
   ## Debug ####
   
@@ -178,16 +135,6 @@ shinyServer(function(input, output, session) {
   # })
   # output$debug_table <- renderTable({
   #   bills_df
-  # })
-  
-  ## Plots ####
-  
-  #
-  
-  ## Tables ####
-  
-  # output$hansard <- renderTable({
-  #   get_hansard_and_summarise()
   # })
   
 })

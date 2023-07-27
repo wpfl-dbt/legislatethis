@@ -18,6 +18,8 @@ purrr::walk(
 
 # Check rates
 
+# Not working...
+
 # url <- 'https://api.openai.com/v1/usage'
 # 
 # openai_api_key = Sys.getenv("OPENAI_API_KEY"),
