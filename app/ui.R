@@ -18,7 +18,7 @@ purrr::walk(
 fluidPage(
   shinyGovstyle::header(
     'EH',
-    'Legislate this', 
+    'Legislate this!', 
     logo = 'crown'
   ),
   shinyGovstyle::banner(

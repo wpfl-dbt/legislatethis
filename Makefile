@@ -25,7 +25,9 @@ install.packages(c(
     "purrr",
     "openai",
     "readr",
-    "lubridate"
+    "lubridate",
+    "gptstudio",
+    "proxyC"
   ),
   clean=TRUE
 );
