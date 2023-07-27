@@ -67,7 +67,20 @@ all_data <- map_df(xml_files, function(xml_file) {
 # Use str_extract to extract numbers after the last "/"
 all_data$person_id_number <- sub(".*/", "", all_data$person_id)
 
+#Select columns
 test_hansard_data <- all_data %>% subset(select = c("file_date", "time", "major_heading","minor_heading", "type", "speakername", "person_id_number", "person_id", "paragraph_text"))
 
+# Function to replace empty strings with NA in a data frame
+replace_empty_with_na <- function(data) {
+  # Use the na_if function to replace empty strings with NA
+  data <- data %>%
+    mutate_all(~na_if(., ""))
+  
+  return(data)
+}
+
+# Call the function to replace empty strings with NA
+hansard_data <- replace_empty_with_na(test_hansard_data)
+
 # Save to RDS
-saveRDS(test_hansard_data, file = here::here('data', 'test_hansard_data.Rds'))
+saveRDS(hansard_data, file = here::here('data', 'hansard_data.Rds'))
