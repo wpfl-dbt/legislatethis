@@ -18,10 +18,10 @@ purrr::walk(
 
 # Check rates
 
-url <- 'https://api.openai.com/v1/usage'
-
-openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-openai_organization = Sys.getenv("OPENAI_ORG_ID")
+# url <- 'https://api.openai.com/v1/usage'
+# 
+# openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+# openai_organization = Sys.getenv("OPENAI_ORG_ID")
 
 # Dummy data for now
 

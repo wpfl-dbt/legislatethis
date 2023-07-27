@@ -9,7 +9,7 @@ readRenviron(here::here('.env'))
 
 embedding_matrix <- function(text_vec, rate_limit = F) {
   if (rate_limit) {
-    chunks <- split(text_vec, ceiling(seq_along(text_vec)/100000))
+    chunks <- split(text_vec, ceiling(seq_along(text_vec)/50000))
     embedded_list <- list()
     
     for (i in 1:length(chunks)) {
