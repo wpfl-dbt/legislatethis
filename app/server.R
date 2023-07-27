@@ -7,6 +7,7 @@ library(readr)
 library(dplyr)
 library(lubridate)
 library(stringr)
+library(gptstudio)
 
 readRenviron(here::here('.env'))
 
@@ -55,7 +56,7 @@ shinyServer(function(input, output, session) {
   
   # Query
   
-  get_hansard_data <- eventReactive(input$search_and_summarise, {
+  get_hansard_and_summarise <- eventReactive(input$search_and_summarise, {
     
     hansard_df |> 
       filter(speakername == input$mp_selecter) |> 
@@ -137,9 +138,9 @@ shinyServer(function(input, output, session) {
   
   ## Tables ####
   
-  output$hansard <- renderTable({
-    get_hansard_data()
-  })
+  # output$hansard <- renderTable({
+  #   get_hansard_data()
+  # })
   
 })
 
