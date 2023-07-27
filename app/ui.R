@@ -42,7 +42,13 @@ fluidPage(
               label = "Search and summarise", 
               type = "start"
             ),
-            # tableOutput(outputId = 'hansard')
+            br(),
+            textOutput(outputId = 'response'),
+            br(),
+            # textOutput(outputId = 'prompt'),
+            br(),
+            # tableOutput(outputId = 'hansard'),
+            br()
           ),
           tabPanel(
             title = 'Debug',

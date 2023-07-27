@@ -54,22 +54,87 @@ shinyServer(function(input, output, session) {
   
   # Data ####
   
-  # Query
+  # Reactive bits
   
-  get_hansard_and_summarise <- eventReactive(input$search_and_summarise, {
-    
-    hansard_df |> 
-      filter(speakername == input$mp_selecter) |> 
+  rv <- reactiveValues(
+    hansard_filtered = hansard_df,
+    prompt = '',
+    response = ''
+  )
+
+  observeEvent(input$search_and_summarise, ignoreInit = TRUE, {
+    rv$hansard_filtered <- hansard_df |>
+      filter(speakername == input$mp_selecter) |>
       # Semantic search will go here
       filter(
         str_detect(
-          paragraph_text, 
-          regex(input$search, ignore_case = T), 
+          paragraph_text,
+          regex(input$search, ignore_case = T),
           negate = FALSE
         )
       )
     
+    cat(file=stderr(), paste0(nrow(rv$hansard_filtered)))
+    
+    output$hansard <- renderTable({
+      rv$hansard_filtered
+    })
   })
+
+  observeEvent(rv$hansard_filtered, ignoreInit = TRUE, {
+    rv$prompt <- build_claude_prompt(
+      speakername = input$mp_selecter,
+      user_topic_input = input$search,
+      speeches = isolate(rv$hansard_filtered$paragraph_text)
+    )
+    
+    cat(file=stderr(), paste0(rv$prompt))
+    
+    output$prompt <- renderText({
+      rv$prompt
+    })
+    
+  })
+  
+  observeEvent(rv$prompt, ignoreInit = TRUE, {
+    rv$response <- create_completion_anthropic(
+      prompt = rv$prompt,
+      history = NULL,
+      model = "claude-1"
+    )
+    
+    cat(file=stderr(), paste0(rv$response))
+    
+    output$response <- renderText({
+      rv$response
+    })
+    
+  })
+  
+  # get_hansard_and_summarise <- eventReactive(input$search_and_summarise, {
+  #   
+  #   hansard_filtered <- hansard_df |> 
+  #     filter(speakername == input$mp_selecter) |> 
+  #     # Semantic search will go here
+  #     filter(
+  #       str_detect(
+  #         paragraph_text, 
+  #         regex(input$search, ignore_case = T), 
+  #         negate = FALSE
+  #       )
+  #     )
+  #   
+  #   
+  #   
+  #   res <- create_completion_anthropic(
+  #     prompt = prompt,
+  #     history = NULL,
+  #     model = "claude-1"
+  #   )
+  #   
+  #   res
+  #   
+  # })
   
   # Bills display
   
@@ -93,30 +158,13 @@ shinyServer(function(input, output, session) {
       multiple = F
     )
   })
-  
-  # output$sorter_ui <- renderUI({
-  #   shinyGovstyle::select_Input(
-  #     inputId = "sorter", 
-  #     label = "Sort by",
-  #     select_text = colnames(bills_df),
-  #     select_value = colnames(bills_df)
-  #   )
+
+  # output$prompt <- renderText({
+  #   rv$prompt
   # })
-  # 
-  # output$col_selecter_ui <- renderUI({
-  #   selectizeInput(
-  #     inputId = 'selecter',
-  #     label = 'Choose columns to display',
-  #     choices = colnames(bills_df),
-  #     selected = c(
-  #       'shortTitle',
-  #       'currentHouse',
-  #       'member.name',
-  #       'member.party',
-  #       'lastUpdate'
-  #     ),
-  #     multiple = TRUE
-  #   )
+  
+  # output$hansard <- renderTable({
+  #   rv$hansard_filtered
   # })
   
   # Outputs ####
@@ -139,7 +187,7 @@ shinyServer(function(input, output, session) {
   ## Tables ####
   
   # output$hansard <- renderTable({
-  #   get_hansard_data()
+  #   get_hansard_and_summarise()
   # })
   
 })

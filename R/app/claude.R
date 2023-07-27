@@ -11,29 +11,14 @@ build_claude_prompt <- function(speakername, user_topic_input, speeches) {
     "'s thoughts on ",
     user_topic_input,
     ".\n\n",
-    "Please summarise your findings in 5 bullet points, referencing each bullet point to the source data, presenting your findings in unbiased language, and do not use loaded terminology. Begin the response with ",
+    "Please summarise your findings in 5 bullet points, referencing each bullet point to the source data, presenting your findings in unbiased language, and do not use loaded terminology. Begin the response with \"",
     speakername,
     "'s views on ",
     user_topic_input,
-    " based on debates in the House of Commons over the past 3 years.\n\n",
-    "Here is the text you should process: ",
+    " based on debates in the House of Commons over the past 3 years.\" \n\n",
+    "Here is the text you should process: \n",
     speech_blob,
     ".\n\n",
     "Assistant:"
   )
 }
-
-test_prompt <- build_claude_prompt("Michelle Donelan", "China", "blahblahblahblah")
-# res <- build_claude_prompt(
-#   speakername = 'Will', 
-#   user_topic_input = 'clowns', 
-#   speeches = c('I like clowns', 'More clowns please', 'My constituents <3 clowns too')
-# )
-# 
-# res
-
-# create_completion_anthropic(
-#   prompt = "Hello Claude!",
-#   history = NULL,
-#   model = "claude-1"
-# )
