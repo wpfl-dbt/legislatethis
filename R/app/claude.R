@@ -6,28 +6,24 @@ readRenviron(here::here('.env'))
 build_claude_prompt <- function(speakername, user_topic_input, speeches) {
   speech_blob <- paste(speeches, collapse = "\n ")
   prompt <- paste0(
-    "These are the speeches from ", 
+    "Human: We want you to summarise ", 
     speakername, 
-    ": \n\n'", 
+    "'s thoughts on ",
+    user_topic_input,
+    ".\n\n",
+    "Please summarise your findings in 5 bullet points, referencing each bullet point to the source data, presenting your findings in unbiased language, and do not use loaded terminology. Begin the response with ",
+    speakername,
+    "'s views on ",
+    user_topic_input,
+    " based on debates in the House of Commons over the past 3 years.\n\n",
+    "Here is the text you should process: ",
     speech_blob,
-    "\n\n",
-    "What are ", 
-    speakername, 
-    "'s thoughts on ", 
-    user_topic_input, 
-    "? \n\n Please summarise the findings in this format; \n ",
-    "5 bullet points, \n ",
-    "each bullet point to be referenced, \n ",
-    "the findings to be provided in unbiased language, \n ",
-    "do not use loaded terminology. \n\n ",
-    "Begin the response with \'Here are ",
-    speakername, 
-    "'s views on ", 
-    user_topic_input, 
-    " based on debates in the House of Commons over the past 3 years.\'"
+    ".\n\n",
+    "Assistant:"
   )
 }
 
+test_prompt <- build_claude_prompt("Michelle Donelan", "China", "blahblahblahblah")
 # res <- build_claude_prompt(
 #   speakername = 'Will', 
 #   user_topic_input = 'clowns', 
