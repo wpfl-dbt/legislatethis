@@ -93,9 +93,10 @@ shinyServer(function(input, output, session) {
     
     # cat(file=stderr(), paste0(nrow(rv$hansard_filtered)))
     
-    output$hansard <- renderTable({
-      rv$hansard_filtered
-    })
+    # output$hansard <- renderTable({
+    #   rv$hansard_filtered
+    # })
+    
   })
 
   observeEvent(rv$hansard_filtered, ignoreInit = TRUE, {
@@ -105,11 +106,11 @@ shinyServer(function(input, output, session) {
       speeches = isolate(rv$hansard_filtered$paragraph_text)
     )
     
-    # cat(file=stderr(), paste0(rv$prompt))
+    cat(file=stderr(), paste0(rv$prompt))
     
-    output$prompt <- renderText({
-      rv$prompt
-    })
+    # output$prompt <- renderText({
+    #   rv$prompt
+    # })
     
   })
   
@@ -120,10 +121,10 @@ shinyServer(function(input, output, session) {
       model = "claude-1"
     )
     
-    # cat(file=stderr(), paste0(rv$response))
+    cat(file=stderr(), paste0(rv$response))
     
-    output$response <- renderText({
-      rv$response
+    output$response <- renderUI({
+      HTML(rv$response)
     })
     
   })

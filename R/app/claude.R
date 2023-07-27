@@ -17,28 +17,8 @@ build_claude_prompt <- function(speakername, user_topic_input, speeches) {
     "3. Present your findings in unbiased language. \n",
     "4. Do not use loaded terminology. \n",
     "5. Only answer if you know the answer or you can make a well-informed guess; otherwise tell me you don't know it. \n",
-    "6. Format your response using markdown \n",
+    "6. Format your response using HTML, using <ol> for bullets \n",
     "7. Begin the response with \"",
-    speakername,
-    "'s views on ",
-    user_topic_input,
-    " based on debates in the House of Commons over the past 3 years.\" \n\n",
-    "Here is the text you should process: \n",
-    speech_blob,
-    ".\n\n",
-    "Assistant:"
-  )
-}
-
-build_claude_prompt_xml_tags <- function(speakername, user_topic_input, speeches) {
-  speech_blob <- paste(speeches, collapse = "\n ")
-  prompt <- paste0(
-    "Human: We want you to summarise ", 
-    speakername, 
-    "'s thoughts on ",
-    user_topic_input,
-    ". \n\n",
-    "Please follow the guidance in your response: \n1. Summarise your findings in 5 bullet points and enclose these bullet points in <bullets></bullets> XML tags. \n2. Reference each bullet point to the source data and include your references at the bottom of your response inside <references></references> XML tags. \n3. Present your findings in unbiased language. \n4. Do not use loaded terminology. \n5. Only answer if you are able to provide an answer from the text available; otherwise tell me in a separate bullet point that you aren't able to summarise a response. \n6. Begin the response with \"",
     speakername,
     "'s views on ",
     user_topic_input,
@@ -49,8 +29,4 @@ build_claude_prompt_xml_tags <- function(speakername, user_topic_input, speeches
     " \n</text> \n\n",
     "Assistant:"
   )
-  return(prompt)
 }
-
-test <- (build_claude_prompt_xml_tags("Michelle","schools","lalalalalalalal"))
-cat(test)

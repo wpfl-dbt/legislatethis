@@ -43,11 +43,7 @@ fluidPage(
               type = "start"
             ),
             br(),
-            markdown(
-              textOutput(outputId = 'response'), 
-              extensions = TRUE, 
-              .noWS = NULL
-            ),
+            uiOutput('response'),
             br()
           ),
           tabPanel(
