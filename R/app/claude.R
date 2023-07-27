@@ -11,7 +11,7 @@ build_claude_prompt <- function(speakername, user_topic_input, speeches) {
     "'s thoughts on ",
     user_topic_input,
     ".\n\n",
-    "Please summarise your findings in 5 bullet points, referencing each bullet point to the source data, presenting your findings in unbiased language, and do not use loaded terminology. Begin the response with \"",
+    "Please follow this guidance in your response: \n1. Summarise your findings in 5 bullet points. \nReference each bullet point to the source data and include your references at the bottom of your response. \n3.Present your findings in unbiased language. \n4. Do not use loaded terminology. \n5 Only answer if you know the answer or you can make a well-informed guess; otherwise tell me you don't know it. \n6. Begin the response with \"",
     speakername,
     "'s views on ",
     user_topic_input,
