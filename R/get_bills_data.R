@@ -46,9 +46,20 @@ while(TRUE) {
   
   response <- GET(url)
   
-  parsed <- response %>%
-    httr::content(as = "text", encoding = "UTF-8") |> 
-    jsonlite::fromJSON(flatten = TRUE)
+  if (response$status_code == 429) {
+    print(
+      paste(
+        'Rate limited for the next',
+        as.character(as.integer(response$headers$`retry-after`) %/% 60),
+        'minutes'
+      )
+    )
+    break
+  } else {
+    parsed <- response %>%
+      httr::content(as = "text", encoding = "UTF-8") |> 
+      jsonlite::fromJSON(flatten = TRUE)
+  }
   
   new_bills <- parsed$items |> 
     as_tibble()
@@ -76,7 +87,7 @@ while(TRUE) {
   page <- page + 1
   
   # Added rate limiting
-  Sys.sleep(.5) 
+  Sys.sleep(.1) 
   
 }
 
@@ -93,24 +104,42 @@ get_bill_publications <- function(bill_id) {
   
   response <- GET(bill_url)
   
-  parsed <- response %>%
-    httr::content(as = "text", encoding = "UTF-8") |> 
-    jsonlite::fromJSON(flatten = TRUE)
+  if (response$status_code == 429) {
+    print(
+      paste(
+        'Rate limited for the next',
+        as.character(as.integer(response$headers$`retry-after`) %/% 60),
+        'minutes'
+      )
+    )
+    break
+  } else {
+    parsed <- response %>%
+      httr::content(as = "text", encoding = "UTF-8") |> 
+      jsonlite::fromJSON(flatten = TRUE)
+  }
   
-  publications <- parsed$publications |> 
-    as_tibble() |> 
-    rename(pub_id = id, pub_title = title) |> 
-    unnest(links, names_repair = 'unique') |> 
-    rename(doc_id = id, doc_title = title)
+  if (length(parsed$publications) > 0) {
+    publications <- parsed$publications |> 
+      as_tibble() |> 
+      rename(pub_id = id, pub_title = title) |> 
+      unnest(links, names_repair = 'unique') |> 
+      rename(doc_id = id, doc_title = title)
+  } else {
+    publications <- NULL
+  }
   
-  Sys.sleep(.1)
+  Sys.sleep(.01)
   
   return(publications)
   
 }
 
-publications <- bills |> 
+publications <- read_rds(here::here('data', 'publications.Rds'))
+
+publications_new <- bills |> 
   select(billId) |> 
+  # Would antijoin on existing queries here
   mutate(
     publications = map(
       billId,
@@ -119,7 +148,10 @@ publications <- bills |>
   ) |> 
   unnest(publications)
 
-saveRDS(bills, file = here::here('data', 'publications.Rds'))
+# Would reconcile here
+publications <- publications_new
+
+saveRDS(publications, file = here::here('data', 'publications.Rds'))
 
 # Get all bill amendments and the members involved
 

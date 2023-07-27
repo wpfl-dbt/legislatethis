@@ -9,18 +9,21 @@ Create a `.env` as below to add Open AI credentials.
 ### Windows and locked-down machines
 
 * Look in the `Makefile` and install the required packages listed with `install.packages()`
-* Run the app with `shiny::runApp()`
+* Run the app with `shiny::runApp('app, port = 9000')`
+* Access it on [http://127.0.0.1:9000](http://127.0.0.1:9000)
 
 ### Anyone with `make`
 
 * `make requirements` installs packages
 * `make app` runs the app
+* Access it on [http://127.0.0.1:9000](http://127.0.0.1:9000)
 
 ## Idea
 
 * Get documents
   * Bills
   * Hansard statements
+* Convert to .txt?
 * [Embed and cache](https://platform.openai.com/docs/guides/embeddings/use-cases)
 * Search them for member and theme
 

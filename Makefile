@@ -11,7 +11,7 @@ NOW:=$(shell date +"%m-%d-%y_%H-%M-%S")
 #################################################################################
 
 app:
-	R -e "shiny::runApp()"
+	R -e "shiny::runApp('app', port = 9000)"
 
 define R_REQUIREMENTS
 options(warn = 2);
@@ -23,7 +23,9 @@ install.packages(c(
     "tidyr",
     "here",
     "purrr",
-    "openai"
+    "openai",
+    "readr",
+    "lubridate"
   ),
   clean=TRUE
 );

@@ -5,7 +5,7 @@ library(shinyGovstyle)
 
 purrr::walk(
   dir(
-    here::here('R'),
+    here::here('R', 'app'),
     full.names = TRUE
   ),
   source
@@ -34,7 +34,22 @@ fluidPage(
         tabsetPanel(
           tabPanel(
             title = 'Search',
-            br()
+            br(),
+            uiOutput('sorter_ui'),
+            uiOutput('col_selecter_ui'),
+            tableOutput(outputId = 'bills')
+          ),
+          tabPanel(
+            title = 'Debug',
+            br(),
+            # selectInput(
+            #   inputId = 'sorter_id',
+            #   label = 'Country (test)',
+            #   choices = iso_lookup,
+            #   selected = 'GBR'
+            # ),
+            textOutput(outputId = 'debug_text'),
+            tableOutput(outputId = 'debug_table'),
           )
         )
       )

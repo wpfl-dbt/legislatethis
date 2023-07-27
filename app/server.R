@@ -3,12 +3,15 @@ library(shiny)
 library(shinyGovstyle)
 library(openai)
 library(purrr)
+library(readr)
+library(dplyr)
+library(lubridate)
 
 readRenviron(here::here('.env'))
 
 purrr::walk(
   dir(
-    here::here('R'),
+    here::here('R', 'app'),
     full.names = TRUE
   ),
   source
@@ -18,13 +21,18 @@ purrr::walk(
 # DATA                                                                         #
 ################################################################################
 
-
 # Cache to store responses
 cache <- list() 
 
 # API key and model to use
 api_key <- "YOUR_API_KEY" 
 model <- "text-davinci-003"
+
+bills_df <- read_rds(here::here('data', 'bills.Rds')) |> 
+  select(where(~ !is.list(.x))) |> 
+  mutate(
+    lastUpdate = lubridate::date(lubridate::ymd_hms(lastUpdate))
+  )
 
 ################################################################################
 # SERVER                                                                       #
@@ -58,7 +66,7 @@ shinyServer(function(input, output, session) {
   
   # Data ####
   
-  # TRAINS
+  # Query
   
   query_cache <- eventReactive(input$call_trains, {
     
@@ -66,17 +74,49 @@ shinyServer(function(input, output, session) {
     
   })
   
+  # Bills display
+  
   # Inputs ####
   
   # Rendered from the server to reduce database calls and speed up
   
-  #
+  output$sorter_ui <- renderUI({
+    shinyGovstyle::select_Input(
+      inputId = "sorter", 
+      label = "Sort by",
+      select_text = colnames(bills_df),
+      select_value = colnames(bills_df)
+    )
+  })
+  
+  output$col_selecter_ui <- renderUI({
+    selectizeInput(
+      inputId = 'selecter',
+      label = 'Choose columns to display',
+      choices = colnames(bills_df),
+      selected = c(
+        'shortTitle',
+        'currentHouse',
+        'member.name',
+        'member.party',
+        'lastUpdate'
+      ),
+      multiple = TRUE
+    )
+  })
   
   # Outputs ####
   
+  #
+  
   ## Debug ####
   
-  #
+  output$debug_text <- renderText({
+    colnames(bills_df)
+  })
+  # output$debug_table <- renderTable({
+  #   bills_df
+  # })
   
   ## Plots ####
   
@@ -84,6 +124,10 @@ shinyServer(function(input, output, session) {
   
   ## Tables ####
   
-  #
+  output$bills <- renderTable({
+    bills_df |> 
+      select(input$selecter) |> 
+      arrange(input$sorter, descending = TRUE)
+  })
   
 })
