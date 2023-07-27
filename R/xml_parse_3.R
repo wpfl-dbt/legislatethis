@@ -5,16 +5,16 @@ library(tibble)
 library(stringr)
 
 # Directory with XML files
-xml_dir <- "~/legislatethis2/xml_test"
+xml_dir <- "~/legislatethis2/xml_files"
 
 # Get a list of all XML files in the directory
 xml_files <- list.files(xml_dir, pattern = "*.xml", full.names = TRUE)
 
 # Process each file
-all_data <- map_df(xml_files, function(xml_content) {
+all_data <- map_df(xml_files, function(xml_file) {
   
   # Parse the XML content
-  xml_parsed <- read_xml(xml_content)
+  xml_parsed <- read_xml(xml_file)
   
   # Extract all elements
   all_nodes <- xml_find_all(xml_parsed, "//*")
@@ -22,6 +22,9 @@ all_data <- map_df(xml_files, function(xml_content) {
   # Initialize empty variables to store the current major and minor heading
   major_heading <- NA
   minor_heading <- NA
+  
+  # Extract date from filename
+  file_date <- str_extract(basename(xml_file), "[0-9]{4}-[0-9]{2}-[0-9]{2}")
   
   # Process each node
   map_df(all_nodes, function(node) {
@@ -42,6 +45,7 @@ all_data <- map_df(xml_files, function(xml_content) {
       # If the node is a speech, extract its attributes and return a tibble
     } else if (node_name == "speech") {
       tibble(
+        file_date = file_date,
         major_heading = major_heading,
         minor_heading = minor_heading,
         speakername = xml_attr(node, "speakername"),
@@ -59,5 +63,11 @@ all_data <- map_df(xml_files, function(xml_content) {
   })
 })
 
+
 # Use str_extract to extract numbers after the last "/"
 all_data$person_id_number <- sub(".*/", "", all_data$person_id)
+
+test_hansard_data <- all_data %>% subset(select = c("file_date", "time", "major_heading","minor_heading", "type", "speakername", "person_id_number", "person_id", "paragraph_text"))
+
+# Save to RDS
+saveRDS(test_hansard_data, file = here::here('data', 'test_hansard_data.Rds'))
