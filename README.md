@@ -9,7 +9,7 @@ Create a `.env` as below to add Open AI credentials.
 ### Windows and locked-down machines
 
 * Look in the `Makefile` and install the required packages listed with `install.packages()`
-* Run the app with `shiny::runApp('app, port = 9000')`
+* Run the app with `shiny::runApp('app', port = 9000')`
 * Access it on [http://127.0.0.1:9000](http://127.0.0.1:9000)
 
 ### Anyone with `make`
