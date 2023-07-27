@@ -3,6 +3,7 @@ library(here)
 library(dplyr)
 library(tidyr)
 library(purrr)
+library(readr)
 
 readRenviron(here::here('.env'))
 
@@ -67,4 +68,19 @@ speeches_df <- speeches_df |>
     embeddings = embedding_matrix(speech)
   )
 
-saveRDS(speeches_df, file = here::here('data', 'speech_embeddings.Rds'))
+# Real data!
+
+speeches_df <- read_rds(here::here('data', 'test_hansard_data.Rds'))
+
+speeches_embed <- speeches_df |> 
+  as_tibble() |> 
+  mutate(
+    embeddings = embedding_matrix(paragraph_text, rate_limit = T)
+  ) |> 
+  select(
+    speakername,
+    paragraph_text,
+    embeddings
+  )
+
+saveRDS(speeches_embed, file = here::here('data', 'speech_embeddings.Rds'))

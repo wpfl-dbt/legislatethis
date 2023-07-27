@@ -35,9 +35,14 @@ fluidPage(
           tabPanel(
             title = 'Search',
             br(),
-            uiOutput('sorter_ui'),
-            uiOutput('col_selecter_ui'),
-            tableOutput(outputId = 'bills')
+            uiOutput('search_ui'),
+            uiOutput('mp_selecter_ui'),
+            shinyGovstyle::button_Input(
+              inputId = "search_and_summarise", 
+              label = "Search and summarise", 
+              type = "start"
+            ),
+            tableOutput(outputId = 'hansard')
           ),
           tabPanel(
             title = 'Debug',
