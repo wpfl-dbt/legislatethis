@@ -1,6 +1,6 @@
 # Legislate This!
 
-A quick hackathon app to surface how MPs amend bills by theme.
+A quick hackathon app to surface what MPs say about an issue.
 
 ## Use
 
