@@ -70,7 +70,7 @@ speeches_df <- speeches_df |>
 
 # Real data!
 
-speeches_df <- read_rds(here::here('data', 'test_hansard_data.Rds'))
+speeches_df <- read_rds(here::here('data', 'hansard_data.Rds'))
 
 speeches_embed <- speeches_df |> 
   as_tibble() |> 

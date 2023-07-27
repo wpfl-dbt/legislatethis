@@ -9,7 +9,7 @@ readRenviron(here::here('.env'))
 
 embedding_matrix <- function(text_vec, rate_limit = F) {
   if (rate_limit) {
-    chunks <- split(text_vec, ceiling(seq_along(text_vec)/100000))
+    chunks <- split(text_vec, ceiling(seq_along(text_vec)/50000))
     embedded_list <- list()
     
     for (i in 1:length(chunks)) {
@@ -76,46 +76,46 @@ search_embeddings <- function(cache, search_term) {
 }
 
 # Scratch
-
-text_vec <- c('x', 'y', 'x')
-
-text_vec[1:100]
-
-embedded_list <- list()
-
-chunks <- split(text_vec, ceiling(seq_along(text_vec)/2))
-chunks[[1]]
-
-embedding <- create_embedding(
-  model = 'text-embedding-ada-002',
-  input = chunks[[1]],
-  openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-  openai_organization = Sys.getenv("OPENAI_ORG_ID")
-)
-
-mat <- do.call(rbind, embedding$data$embedding) |> 
-  as.matrix()
-
-rownames(mat) <- text_vec 
-
-for (i in 1:length(chunks)) {
-  embedding <- create_embedding(
-    model = 'text-embedding-ada-002',
-    input = chunks[[i]],
-    openai_api_key = Sys.getenv("OPENAI_API_KEY"),
-    openai_organization = Sys.getenv("OPENAI_ORG_ID")
-  )
-  
-  mat <- do.call(rbind, embedding$data$embedding) |> 
-    as.matrix()
-  
-  rownames(mat) <- chunks[[i]] 
-  
-  embedded_list[[i]] <- mat
-}
-
-str(embedded_list[[1]])
-
-res <- do.call(rbind, embedded_list)
-
-str(res)
+# 
+# text_vec <- c('x', 'y', 'x')
+# 
+# text_vec[1:100]
+# 
+# embedded_list <- list()
+# 
+# chunks <- split(text_vec, ceiling(seq_along(text_vec)/2))
+# chunks[[1]]
+# 
+# embedding <- create_embedding(
+#   model = 'text-embedding-ada-002',
+#   input = chunks[[1]],
+#   openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+#   openai_organization = Sys.getenv("OPENAI_ORG_ID")
+# )
+# 
+# mat <- do.call(rbind, embedding$data$embedding) |> 
+#   as.matrix()
+# 
+# rownames(mat) <- text_vec 
+# 
+# for (i in 1:length(chunks)) {
+#   embedding <- create_embedding(
+#     model = 'text-embedding-ada-002',
+#     input = chunks[[i]],
+#     openai_api_key = Sys.getenv("OPENAI_API_KEY"),
+#     openai_organization = Sys.getenv("OPENAI_ORG_ID")
+#   )
+#   
+#   mat <- do.call(rbind, embedding$data$embedding) |> 
+#     as.matrix()
+#   
+#   rownames(mat) <- chunks[[i]] 
+#   
+#   embedded_list[[i]] <- mat
+# }
+# 
+# str(embedded_list[[1]])
+# 
+# res <- do.call(rbind, embedded_list)
+# 
+# str(res)
