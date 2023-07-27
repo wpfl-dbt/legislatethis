@@ -34,6 +34,9 @@ bills_df <- read_rds(here::here('data', 'bills.Rds')) |>
     lastUpdate = lubridate::date(lubridate::ymd_hms(lastUpdate))
   )
 
+hansard_df <- read_rds(here::here('data', 'speech_embeddings.Rds'))
+hansard_mps <- hansard_df
+
 ################################################################################
 # SERVER                                                                       #
 ################################################################################
@@ -68,9 +71,10 @@ shinyServer(function(input, output, session) {
   
   # Query
   
-  query_cache <- eventReactive(input$call_trains, {
+  get_hansard_data <- eventReactive(input$search_and_summarise, {
     
-    x
+    hansard_df |> 
+      filter(speakername == input$mp_selecter)
     
   })
   
@@ -79,6 +83,25 @@ shinyServer(function(input, output, session) {
   # Inputs ####
   
   # Rendered from the server to reduce database calls and speed up
+  
+  output$search_ui <- render({
+    shinyGovstyle::text_Input(
+      inputId = "search", 
+      label = "Event name"
+    )
+  })
+  
+  output$mp_selecter_ui <- renderUI({
+    selectizeInput(
+      inputId = 'mp_selecter',
+      label = 'Choose MP',
+      choices = colnames(bills_df),
+      selected = 'MP_1',
+      multiple = F
+    )
+  })
+  
+  ###
   
   output$sorter_ui <- renderUI({
     shinyGovstyle::select_Input(
