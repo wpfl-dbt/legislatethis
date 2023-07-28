@@ -1,52 +1,50 @@
 # Legislate This!
 
-A quick hackathon app to surface what MPs say about an issue.
+A quick hackathon app to summarise what MPs say about an issue on Hansard.
 
 ## Use
 
-Create a `.env` as below to add Open AI credentials.
+Make a `.env` file and set the following variables:
+
+  * OPENAI_ORG_ID as the org ID found on the [Open AI Platform Settings](https://platform.openai.com/account/org-settings)
+  * OPENAI_API_KEY as an API key generated on the [Open AI Platform AI keys page](https://platform.openai.com/account/api-keys)
+  * ANTHROPIC_API_KEY as an API key generated on [Anthropic's keygen page](https://console.anthropic.com/account/keys)
+  
+Run the app in one of two ways:
 
 ### Windows and locked-down machines
 
 * Look in the `Makefile` and install the required packages listed with `install.packages()`
 * Run the app with `shiny::runApp('app', port = 9000')`
-* Access it on [http://127.0.0.1:9000](http://127.0.0.1:9000)
 
 ### Anyone with `make`
 
-* `make requirements` installs packages
+* `make requirements` installs required packages
 * `make app` runs the app
-* Access it on [http://127.0.0.1:9000](http://127.0.0.1:9000)
 
-## Idea
+Access the running app on [http://127.0.0.1:9000](http://127.0.0.1:9000)
 
-* Get documents
-  * Bills
-  * Hansard statements
-* Convert to .txt?
-* [Embed and cache](https://platform.openai.com/docs/guides/embeddings/use-cases)
-* Search them for member and theme
+## The approach
 
-This will enable us to answer:
+We collect MP's statements from [Hansard](https://hansard.parliament.uk) based on [XML scrapes hosted by TheyWorkForYou](https://www.theyworkforyou.com/pwdata/scrapedxml/debates/).
 
-* What have people said about themes in Hansard?
-  * Return the highest-matching docs, ask LLM to summarise
-* What happens to that theme in bills? For one theme:
-  * What's the bill pass rate, and with how many amendments?
-  * Which members amend this theme?
-  * What clusters of members amend together?
-  * Which members are most associated with a bill passing, or failing?
+We allow the user to search these statements by theme and MP in a Shiny app, then pass them to Claude 2 to summarise.
 
-Stuff to think about:
+## Next steps
 
-* Will the summarisation work? Need a spike on prompt tuning -- potentially a standard set of questions? An example output template?
-* Will searching a bill document for a member return them? Do it bluntly first. If not, need to attach member info to bills
-* Will searching a bill document or Hansard statement for a theme work? Do it bluntly first -- critical this works
-* The bill passing stuff needs a basic BI-style database. Should we knock up a quick ERD?
+* Add semantic search
+  * See `R/app/search.R` for embedding and cosine similarity functions that didn't quite make the cut
+* Embed bills and social media data to allow them to be searched and summarised too
+  * See `R/embed_and_cache.R` for existing work on this using OpenAI
+* Search and calculate an MP's success record on amending bills or forcing a u-turn, by theme
+* Allow user to specify a bill, and return all MPs who care about its theme, their voting record, and a summary of their statements
+* Show inconsistencies between MP's statements and amendment behaviour
 
-## Development
+## Team
 
-* Make a `.env` file and set the following variables:
-  * OPENAI_ORG_ID as the org ID found on the [Open AI Platform Settings](https://platform.openai.com/account/org-settings)
-  * OPENAI_API_KEY as an API key generated on the [Open AI Platform AI keys page](https://platform.openai.com/account/api-keys)
-  * ANTHROPIC_API_KEY as an API key generated on [Anthropic's keygen page](https://console.anthropic.com/account/keys)
+* Nicky Agius
+* Will Vaughan
+* Ibraaheem Bahadur
+* Jack Higgins
+* Holly Brooks
+* Will Langdale
