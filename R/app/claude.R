@@ -13,16 +13,16 @@ build_claude_prompt <- function(speakername, user_topic_input, speeches) {
     ".\n\n",
     "Please follow this guidance in your response: \n",
     "1. Summarise your findings in 5 bullet points. \n",
-    "2. Reference each bullet point to the source data and include your references at the bottom of your response. \n",
+    "2. For each bullet point, reference it with a short quote from the source text. Do not change the text in this quote. Include your references at the bottom of your response. \n",
     "3. Present your findings in unbiased language. \n",
     "4. Do not use loaded terminology. \n",
     "5. Only answer if you know the answer or you can make a well-informed guess; otherwise tell me you don't know it. \n",
     "6. Format your response using HTML, using <ol> for bullets \n",
-    "7. Begin the response with \"",
+    "7. Begin the response with <h2>",
     speakername,
     "'s views on ",
     user_topic_input,
-    " based on debates in the House of Commons over the past 3 years.\" \n\n",
+    " based on debates in the House of Commons over the past 3 years.</h2> \n\n",
     "The text you should process is inside <text></text> XML tags. \n\n",
     "<text> \n",
     speech_blob,
@@ -30,6 +30,9 @@ build_claude_prompt <- function(speakername, user_topic_input, speeches) {
     "Assistant:"
   )
 }
+
+test <- build_claude_prompt("Michelle Donelan", "schools", "hahahahahahahah")
+cat(test)
 
 build_claude_prompt_xml_tags <- function(speakername, user_topic_input, speeches) {
   speech_blob <- paste(speeches, collapse = "\n ")
@@ -40,7 +43,7 @@ build_claude_prompt_xml_tags <- function(speakername, user_topic_input, speeches
     user_topic_input,
     ". \n\n",
     "Please follow the guidance in your response: \n",
-    "1. Summarise your findings in 5 bullet points and enclose these bullet points in <bullets></bullets> XML tags. \n",
+    "1. Summarise your findings in 5 bullet points and enclose these bullet points in <bullets></bullets> XML tags. Put an Emoji in your responses \n",
     "2. Reference each bullet point to the source data and include your references at the bottom of your response inside <references></references> XML tags. \n",
     "3. Present your findings in unbiased language. \n",
     "4. Do not use loaded terminology. \n",
