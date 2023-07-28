@@ -43,7 +43,7 @@ build_claude_prompt_xml_tags <- function(speakername, user_topic_input, speeches
     user_topic_input,
     ". \n\n",
     "Please follow the guidance in your response: \n",
-    "1. Summarise your findings in 5 bullet points and enclose these bullet points in <bullets></bullets> XML tags. Put an Emoji in your responses \n",
+    "1. Summarise your findings in 5 bullet points and enclose these bullet points in <bullets></bullets> XML tags. \n",
     "2. Reference each bullet point to the source data and include your references at the bottom of your response inside <references></references> XML tags. \n",
     "3. Present your findings in unbiased language. \n",
     "4. Do not use loaded terminology. \n",
