@@ -118,7 +118,7 @@ shinyServer(function(input, output, session) {
     rv$response <- create_completion_anthropic(
       prompt = rv$prompt,
       history = NULL,
-      model = "claude-1"
+      model = "claude-2"
     )
     
     cat(file=stderr(), paste0(rv$response))
