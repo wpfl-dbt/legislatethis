@@ -6,9 +6,9 @@ A quick hackathon app to summarise what MPs say about an issue on Hansard.
 
 Make a `.env` file and set the following variables:
 
-  * OPENAI_ORG_ID as the org ID found on the [Open AI Platform Settings](https://platform.openai.com/account/org-settings)
-  * OPENAI_API_KEY as an API key generated on the [Open AI Platform AI keys page](https://platform.openai.com/account/api-keys)
-  * ANTHROPIC_API_KEY as an API key generated on [Anthropic's keygen page](https://console.anthropic.com/account/keys)
+  * `OPENAI_ORG_ID` as the org ID found on the [Open AI Platform Settings](https://platform.openai.com/account/org-settings)
+  * `OPENAI_API_KEY` as an API key generated on the [Open AI Platform AI keys page](https://platform.openai.com/account/api-keys)
+  * `ANTHROPIC_API_KEY` as an API key generated on [Anthropic's keygen page](https://console.anthropic.com/account/keys)
   
 Run the app in one of two ways:
 
