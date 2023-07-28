@@ -32,12 +32,16 @@ We allow the user to search these statements by theme and MP in a Shiny app, the
 
 ## Next steps
 
+This library isn't currently under active development, but if we had more time:
+
 * Add semantic search
   * See `R/app/search.R` for embedding and cosine similarity functions that didn't quite make the cut
 * Embed bills and social media data to allow them to be searched and summarised too
   * See `R/embed_and_cache.R` for existing work on this using OpenAI
 * Search and calculate an MP's success record on amending bills or forcing a u-turn, by theme
 * Allow user to specify a bill, and return all MPs who care about its theme, their voting record, and a summary of their statements
+* Use topic modelling to draw out themes a human might not see
+* Use graph approaches to connect these ideas together
 * Show inconsistencies between MP's statements and amendment behaviour
 
 ## Team
